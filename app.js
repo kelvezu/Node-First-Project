@@ -1,25 +1,44 @@
 const express = require('express');
 const app = express();
 
+// view engine
+// app.set is used for application settings
+app.set('view engine', 'ejs');
+
 // listen for request
 
 app.listen(3004);
 
 app.get('/', (req, res) => {
-    // res.send('<h1>Welcome to Express! mon! </h1>');
-    // console.log(__dirname);
-    res.sendFile('./views/index.html', { root: __dirname });
+    data = {
+        title: 'Home',
+        blogs: [
+            { title: 'Sample Title 1', body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, beatae!" },
+            { title: 'Sample Title 2', body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, beatae!" },
+            { title: 'Sample Title 3', body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, beatae!" },
+        ]
+    }
+    res.render('index', data);
 });
 
 app.get('/about', (req, res) => {
-    res.sendFile('./views/about.html', { root: __dirname });
+    data = {
+        title: 'About'
+    }
+    res.render('about', data)
 });
 
-app.get('/about-us', (req, res) => {
-    res.redirect('/about') // this will redirect to about if the browser hit the /about-us
+app.get('/blogs/create', (req, res) => {
+    data = {
+        title: 'Create Blog'
+    }
+    res.render('blogCreate', data) // this will redirect to about if the browser hit the /about-us
 })
 
 // mostly use to invoke a middleware
 app.use((req, res) => {
-    res.status(404).sendFile('./views/404.html', { root: __dirname });
+    data = {
+        title: 'Error'
+    }
+    res.status(404).render('404', data)
 })
